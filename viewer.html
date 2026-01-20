@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MindSkyra Institute – Study Notes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- <link rel="stylesheet" href="css/style.css"> -->
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(180deg, #00022a 0%, #0a4250 50%, #000000 100%);
+  color: #e0e0e0;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Prevent screenshots and screen recording */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+}
+
+/* Glass Header */
+.header {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  padding: 20px 30px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-radius: 0 0 20px 20px;
+}
+
+.header-content {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  font-size: 1.8em;
+  color: #9bc9fe;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-shadow: 0 0 20px rgba(170, 235, 84, 0.5);
+}
+
+.subtitle {
+  color: #80b3ff;
+  font-size: 0.9em;
+  opacity: 0.9;
+  margin-top: 5px;
+}
+
+.security-badge {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.85em;
+  color: #80b3ff;
+}
+
+/* Main Container */
+.container {
+  max-width: 1600px;
+  margin: 20px auto;
+  padding: 0 20px 100px 20px;
+}
+
+/* Glass PDF Container */
+.pdf-container {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 20px;
+  padding: 15px;
+  box-shadow: 
+    0 8px 32px 0 rgba(63, 206, 232, 0.37),
+    inset 0 0 60px rgba(226, 156, 156, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.viewer-container {
+  height: calc(100vh - 200px);
+  min-height: 800px;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 2px solid rgba(74, 158, 255, 0.2);
+  background: #000;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(74, 158, 255, 0.1);
+}
+
+#pdfFrame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+}
+
+/* Security watermark overlay */
+.watermark {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background-image: 
+    repeating-linear-gradient(
+      -45deg,
+      rgba(74, 158, 255, 0.02) 0px,
+      rgba(74, 158, 255, 0.02) 100px,
+      transparent 100px,
+      transparent 200px
+    );
+}
+
+.watermark::after {
+  content: '🔒 PROTECTED – MINDSKYRA INSTITUTE';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  font-size: 2.5em;
+  font-weight: bold;
+  color: rgba(74, 158, 255, 0.03);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 15px;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 4, 40, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -8px 32px 0 rgba(3, 4, 24, 0.37);
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 10px;
+  z-index: 1000;
+}
+
+.bottom-nav > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 8px 20px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bottom-nav > div:hover {
+  background: rgba(74, 158, 255, 0.2);
+  transform: translateY(-3px);
+  border-color: rgba(0, 0, 0, 0.4);
+}
+
+.bottom-nav span {
+  font-size: 1.4em;
+  margin-bottom: 5px;
+  filter: drop-shadow(0 0 10px rgba(74, 158, 255, 0.6));
+}
+
+.bottom-nav div div {
+  font-size: 0.8em;
+  color: #b0d0ff;
+}
+
+/* Disable text selection */
+::selection {
+  background: transparent;
+  color: inherit;
+}
+
+::-moz-selection {
+  background: transparent;
+  color: inherit;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header {
+    padding: 15px 20px;
+  }
+
+  .header h1 {
+    font-size: 1.3em;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .pdf-container {
+    padding: 10px;
+  }
+  
+  .viewer-container {
+    height: calc(100vh - 180px);
+    min-height: 500px;
+  }
+  
+  .bottom-nav {
+    padding: 8px 5px;
+  }
+  
+  .bottom-nav > div {
+    padding: 6px 12px;
+  }
+  
+  .bottom-nav span {
+    font-size: 1.2em;
+  }
+  
+  .bottom-nav div div {
+    font-size: 0.7em;
+  }
+}
+
+/* Anti-screenshot layer */
+.protection-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9997;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    rgba(74, 158, 255, 0.01) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+}
+
+/* Loading state */
+.loading {
+  text-align: center;
+  padding: 50px;
+  color: #4a9eff;
+  font-size: 1.2em;
+}
+</style>
+</head>
+<body oncontextmenu="return false" oncopy="return false" oncut="return false" onpaste="return false">
+
+<!-- Glass Header -->
+<div class="header">
+  <div class="header-content">
+    <div>
+      <h1>📖 MindSkyra Institute – Study Material</h1>
+      <p class="subtitle">Premium Learning Portal</p>
+    </div>
+    <div class="security-badge">
+      🔒 Protected Content
+    </div>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div class="container">
+  <div class="pdf-container">
+    <div class="viewer-container">
+      <iframe
+        id="pdfFrame"
+        src=""
+        width="100%"
+        height="100%"
+        sandbox="allow-scripts allow-same-origin">
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<!-- Security Overlays -->
+<div class="watermark"></div>
+<div class="protection-layer"></div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <div onclick="go('dashboard.html')">
+    <span>🏠</span>
+    <div>Home</div>
+  </div>
+  <div onclick="history.back()">
+    <span>⬅️</span>
+    <div>Back</div>
+  </div>
+  <div onclick="go('payment.html')">
+    <span>💳</span>
+    <div>Payment</div>
+  </div>
+  <div onclick="go('dashboard.html')">
+    <span>☰</span>
+    <div>Menu</div>
+  </div>
+</div>
+
+<script>
+// Navigation function
+function go(p) {
+  location.href = p;
+}
+
+// Disable keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+  // Prevent Print (Ctrl+P)
+  if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+    e.preventDefault();
+    alert('🔒 Printing is disabled');
+    return false;
+  }
+  
+  // Prevent Save (Ctrl+S)
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    alert('🔒 Saving is disabled');
+    return false;
+  }
+  
+  // Prevent Screenshot (Print Screen)
+  if (e.key === 'PrintScreen') {
+    alert('🔒 Screenshots are not allowed');
+    return false;
+  }
+  
+  // Prevent DevTools
+  if (e.key === 'F12' || 
+      ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+      ((e.ctrlKey || e.metaKey) && e.key === 'u')) {
+    e.preventDefault();
+    return false;
+  }
+  
+  // Prevent Select All
+  if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+    e.preventDefault();
+    return false;
+  }
+  
+  // Prevent Copy
+  if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+    e.preventDefault();
+    alert('🔒 Copying is disabled');
+    return false;
+  }
+});
+
+// Disable right-click
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+// Disable text selection with mouse
+document.addEventListener('selectstart', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+// Disable drag
+document.addEventListener('dragstart', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+// Detect screenshot attempts (blur/focus)
+let blurTime;
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) {
+    blurTime = Date.now();
+  } else {
+    if (blurTime && Date.now() - blurTime < 100) {
+      console.log('Potential screenshot attempt detected');
+    }
+  }
+});
+
+// Load PDF
+const params = new URLSearchParams(window.location.search);
+const pdfUrl = params.get("pdf");
+
+if (!pdfUrl) {
+  alert("⚠️ Invalid PDF URL");
+  go("dashboard.html");
+} else {
+  // Use Google Drive preview for better security
+  const frameElement = document.getElementById("pdfFrame");
+  if (pdfUrl.includes("drive.google.com")) {
+    frameElement.src = pdfUrl.replace("/view", "/preview");
+  } else {
+    frameElement.src = pdfUrl;
+  }
+}
+
+// Monitor for DevTools
+(function() {
+  const element = new Image();
+  Object.defineProperty(element, 'id', {
+    get: function() {
+      // DevTools is open
+      location.href = 'dashboard.html';
+    }
+  });
+  console.log(element);
+})();
+</script>
+
+<!-- Firebase Authentication -->
+<script type="module">
+// Note: Replace with your actual Firebase config
+const firebaseConfig = {
+  // Your config here
+};
+
+// Uncomment when using real Firebase
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    location.href = "login.html";
+    return;
+  }
+  
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists() || snap.data().approved !== true) {
+    location.href = "payment-status.html";
+  }
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MindSkyra Institute – Student Registration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/style.css">
+<style>
+    
+/* ---------- GLOBAL ---------- */
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #050b14, #0b1e2d, #1a0f2e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+/* ---------- CARD ---------- */
+.card {
+  width: 100%;
+  max-width: 380px;
+  padding: 28px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ---------- FLOAT ANIMATION ---------- */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+/* ---------- HEADER ---------- */
+.card h2 {
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.card p.subtitle {
+  text-align: center;
+  font-size: 13px;
+  color: #b9c7d5;
+  margin-bottom: 20px;
+}
+
+/* ---------- INPUTS ---------- */
+input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  border: none;
+  outline: none;
+  background: rgba(0,0,0,0.35);
+  color: #fff;
+  font-size: 14px;
+}
+
+input::placeholder {
+  color: #9fb3c8;
+}
+
+/* ---------- BUTTON ---------- */
+button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 16px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #00e5a8, #ff4fd8);
+  color: #000;
+  font-size: 15px;
+}
+
+/* ---------- MESSAGE ---------- */
+#msg {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 13px;
+  color: #ff9ddc;
+}
+
+/* ---------- FOOTER ---------- */
+.footer {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 12px;
+  color: #9fb3c8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <h2>🎓 Student Registration</h2>
+  <p class="subtitle">Join MindSkyra Institute & start learning smarter</p>
+  <input type="name" id="name" placeholder="Enter your name">
+  <input type="email" id="email" placeholder="📧 Email address">
+  <input type="password" id="password" placeholder="🔒 Password">
+
+  <button id="registerBtn">Create Account</button>
+
+  <p id="msg"></p>
+
+  <div class="footer">
+    Already registered? <a href="login.html" style="color:#00e5a8;">Login</a>
+  </div>
+
+</div>
+
+<!-- 🔐 FIREBASE LOGIC (UNCHANGED) -->
+<script type="module">
+import { auth, db } from "./js/firebase.js";
+import { createUserWithEmailAndPassword } from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { doc, setDoc } from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const msg = document.getElementById("msg");
+
+document.getElementById("registerBtn").onclick = async () => {
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if (!email || !password) {
+    msg.innerText = "Please fill all fields";
+    return;
+  }
+
+  try {
+    const res = await createUserWithEmailAndPassword(auth, email, password);
+
+    await setDoc(doc(db, "users", res.user.uid), {
+      name : name,
+      email: email,
+      role: "student",
+      approved: false
+    });
+
+    window.location.href = "payment.html";
+  } catch (err) {
+    msg.innerText = err.message;
+  }
+};
+</script>
+
+</body>
+</html>

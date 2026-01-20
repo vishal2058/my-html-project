@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+<input type="file" id="file" />
+<button onclick="upload()">Upload</button>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFsPudPHSmZiVxNxgzas9zbYIMMG5yR4g8DuWJGk9xqxgbvxhJ_9mlI9mRz3PBtcrKHQ/exec";
+
+function upload() {
+  const file = document.getElementById("file").files[0];
+  const reader = new FileReader();
+
+  reader.onload = function() {
+    const base64 = reader.result.split(",")[1];
+
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        fileName: file.name,
+        mimeType: file.type,
+        base64: base64
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("Uploaded!\n" + data.fileUrl);
+      } else {
+        alert("Error: " + data.error);
+      }
+    });
+  };
+
+  reader.readAsDataURL(file);
+}
+</script>
+</body>
+</html>

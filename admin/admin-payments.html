@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MindSkyra Institute – Payment Approvals</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="../css/style.css">
+
+<style>
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #050b14, #0b1e2d, #1a0f2e);
+  font-family: 'Segoe UI', sans-serif;
+  color: #fff;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.muted {
+  text-align: center;
+  color: #9fb3c8;
+  font-size: 13px;
+}
+
+.card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 18px;
+  margin-top: 18px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+.card img {
+  width: 100%;
+  border-radius: 12px;
+  margin: 10px 0;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  background: linear-gradient(135deg, #00e5a8, #00b8ff);
+  color: #000;
+}
+
+.btn.reject {
+  background: linear-gradient(135deg, #ff4d4d, #ff7b7b);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>💳 Payment Approvals</h2>
+  <p class="muted">MindSkyra Institute – Admin Panel</p>
+
+  <div id="paymentList"></div>
+</div>
+
+<script type="module">
+import { auth, db } from "../js/firebase.js";
+import { onAuthStateChanged } from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  getDoc
+} from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const list = document.getElementById("paymentList");
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    location.href = "admin-login.html";
+    return;
+  }
+
+  // 🔐 Admin verification
+  const adminSnap = await getDoc(doc(db, "users", user.uid));
+  if (!adminSnap.exists() || adminSnap.data().role !== "admin") {
+    alert("Access denied");
+    location.href = "admin-login.html";
+    return;
+  }
+
+  loadPayments();
+});
+
+async function loadPayments() {
+  list.innerHTML = "";
+
+  const snap = await getDocs(collection(db, "payments"));
+
+  if (snap.empty) {
+    list.innerHTML = "<p>No payment requests</p>";
+    return;
+  }
+
+  let hasPending = false;
+
+  snap.forEach(p => {
+    const d = p.data();
+
+    if (d.status !== "pending") return;
+
+    hasPending = true;
+
+    const div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
+      <p><strong>Name:</strong> ${d.name}</p>
+      <p><strong>Email:</strong> ${d.email}</p>
+
+      <img src="${d.proofUrl}" alt="Payment Proof">
+
+      <button class="btn" onclick="approve('${p.id}', '${d.uid}')">
+        ✅ Approve
+      </button>
+
+      <button class="btn reject" onclick="reject('${p.id}')">
+        ❌ Reject
+      </button>
+    `;
+
+    list.appendChild(div);
+  });
+
+  if (!hasPending) {
+    list.innerHTML = "<p>No pending approvals</p>";
+  }
+}
+
+window.approve = async (paymentId, uid) => {
+  await updateDoc(doc(db, "payments", paymentId), {
+    status: "approved"
+  });
+
+  await updateDoc(doc(db, "users", uid), {
+    approved: true
+  });
+
+  alert("Payment approved & access unlocked");
+  loadPayments();
+};
+
+window.reject = async (paymentId) => {
+  await updateDoc(doc(db, "payments", paymentId), {
+    status: "rejected"
+  });
+
+  alert("Payment rejected");
+  loadPayments();
+};
+</script>
+
+</body>
+</html>

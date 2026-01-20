@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MindSkyra Institute – Subject</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="container">
+  <h2 id="subjectTitle">Loading...</h2>
+  <p class="muted">MindSkyra Institute</p>
+
+  <div id="pdfList" class="grid" style="margin-top:20px;"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div onclick="go('dashboard.html')">
+    <span>🏠</span>
+    Home
+  </div>
+  <div class="active">
+    <span>📚</span>
+    Subject
+  </div>
+  <div onclick="go('payment.html')">
+    <span>💳</span>
+    Payment
+  </div>
+  <div onclick="go('dashboard.html')">
+    <span>☰</span>
+    Menu
+  </div>
+</div>
+
+<script>
+function go(p) {
+  location.href = p;
+}
+</script>
+
+<!-- 🔐 FIREBASE LOGIC -->
+<script type="module">
+import { auth, db } from "./js/firebase.js";
+import { onAuthStateChanged } from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { collection, query, where, getDocs } from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const params = new URLSearchParams(window.location.search);
+const subject = params.get("name");
+
+
+
+document.getElementById("subjectTitle").innerText =
+  subject ? subject.toUpperCase() : "SUBJECT";
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    location.href = "login.html";
+    return;
+  }
+
+  const q = query(
+    collection(db, "pdfs"),
+    where("subject", "==", subject)
+  );
+
+  const snap = await getDocs(q);
+  const list = document.getElementById("pdfList");
+
+  if (snap.empty) {
+    list.innerHTML = `
+      <div class="card">
+        <p class="muted">No PDFs uploaded yet</p>
+      </div>
+    `;
+    return;
+  }
+
+  snap.forEach(doc => {
+    const data = doc.data();
+
+    const card = document.createElement("div");
+    card.className = "card subject-card";
+    card.innerHTML = `
+      <h3>${data.title}</h3>
+      <p class="muted">Tap to open</p>
+    `;
+    card.onclick = () => {
+      location.href = `viewer.html?pdf=${encodeURIComponent(data.url)}`;
+    };
+
+    list.appendChild(card);
+  });
+});
+</script>
+<script>
+    if (data.approved !== true) {
+  window.location.href = "payment-status.html";
+  return;
+}
+
+</script>
+
+</body>
+</html>

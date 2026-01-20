@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Profile - MindSkyra Institute</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  color: #ffffff;
+  min-height: 100vh;
+  padding-bottom: 80px;
+  overflow-x: hidden;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #1f4037 0%, #05356b 100%);
+  padding: 30px 20px 40px;
+  border-radius: 0 0 30px 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.back-btn {
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  transition: transform 0.2s;
+}
+
+.back-btn:active {
+  transform: scale(0.9);
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: linear-gradient(45deg, #00d4ff, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.placeholder {
+  width: 32px;
+}
+
+/* Profile Avatar */
+.profile-avatar {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.avatar-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00d4ff, #0099cc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  margin: 0 auto 15px;
+  box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.profile-name {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.profile-email {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* Container */
+.container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Success Banner */
+.success-banner {
+  background: linear-gradient(135deg, #00c851, #007e33);
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 25px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 200, 81, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.success-icon {
+  font-size: 50px;
+  margin-bottom: 10px;
+  display: block;
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.success-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.success-message {
+  font-size: 14px;
+  opacity: 0.95;
+  line-height: 1.5;
+}
+
+/* Info Cards */
+.info-section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #51f9fbe3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-card {
+  background: linear-gradient(135deg, #2d2d2d 0%, #3a3a3a 100%);
+  border: 1px solid #3d3d3d;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.info-card:active {
+  transform: scale(0.98);
+  border-color: #00d4ff;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+}
+
+.info-label {
+  font-size: 14px;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #00d4ff;
+}
+
+/* Purchase Details */
+.purchase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.purchase-item {
+  background: linear-gradient(135deg, #1f4037 0%, #2d5a4d 100%);
+  border-radius: 15px;
+  padding: 18px;
+  text-align: center;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.purchase-icon {
+  font-size: 30px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.purchase-label {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-bottom: 5px;
+}
+
+.purchase-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #00d4ff;
+}
+
+/* Motivational Card */
+.motivation-card {
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  border-radius: 20px;
+  padding: 25px;
+  text-align: center;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(106, 17, 203, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.motivation-icon {
+  font-size: 45px;
+  margin-bottom: 12px;
+  display: block;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.motivation-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.motivation-text {
+  font-size: 14px;
+  opacity: 0.95;
+  line-height: 1.6;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 16px;
+  border-radius: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00d4ff, #0099cc);
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #2d2d2d 0%, #3a3a3a 100%);
+  color: #ffffff;
+  border: 2px solid #3d3d3d;
+}
+
+.btn-secondary:active {
+  transform: scale(0.95);
+  border-color: #00d4ff;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0 20px;
+  border-top: 1px solid #3d3d3d;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px 15px;
+  transition: all 0.3s ease;
+  color: #888;
+}
+
+.nav-item.active {
+  color: #00d4ff;
+}
+
+.nav-item:active {
+  transform: scale(0.9);
+}
+
+.nav-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.nav-label {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* Sidebar Menu */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 280px;
+  height: 100vh;
+  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+  transition: left 0.3s ease;
+  z-index: 200;
+  overflow-y: auto;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar-header {
+  background: linear-gradient(135deg, #1f4037 0%, #99f2c8 100%);
+  padding: 30px 20px;
+  margin-bottom: 10px;
+}
+
+.sidebar-logo {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.sidebar-user {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.menu-item {
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 16px;
+}
+
+.menu-item:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-left-color: #00d4ff;
+}
+
+.menu-item:active {
+  background: rgba(0, 212, 255, 0.2);
+}
+
+.menu-icon {
+  font-size: 22px;
+  width: 30px;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 150;
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-top">
+    <div class="back-btn" onclick="go('dashboard.html')">←</div>
+    <div class="logo">PROFILE</div>
+    <div class="placeholder"></div>
+  </div>
+
+  <div class="profile-avatar">
+    <div class="avatar-circle">👤</div>
+    <div class="profile-name" id="userName">Student Name</div>
+    <div class="profile-email" id="userEmail">student@email.com</div>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div class="container">
+  
+  <!-- Success Banner -->
+  <div class="success-banner">
+    <span class="success-icon">🎉</span>
+    <div class="success-title">Purchase Successful!</div>
+    <div class="success-message">
+      You have successfully enrolled in the<br><strong>Board Exam Complete Package</strong>
+    </div>
+  </div>
+
+  <!-- Purchase Details -->
+  <div class="info-section">
+    <div class="section-title">📦 Your Purchase</div>
+    <div class="purchase-grid">
+      <div class="purchase-item">
+        <span class="purchase-icon">💳</span>
+        <div class="purchase-label">Amount Paid</div>
+        <div class="purchase-value">₹749</div>
+      </div>
+      <div class="purchase-item">
+        <span class="purchase-icon">📚</span>
+        <div class="purchase-label">Courses</div>
+        <div class="purchase-value">4 Subjects</div>
+      </div>
+      <div class="purchase-item">
+        <span class="purchase-icon">✅</span>
+        <div class="purchase-label">Status</div>
+        <div class="purchase-value">Active</div>
+      </div>
+      <div class="purchase-item">
+        <span class="purchase-icon">⏰</span>
+        <div class="purchase-label">Access</div>
+        <div class="purchase-value">Lifetime</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Account Info -->
+  <div class="info-section">
+    <div class="section-title">👤 Account Information</div>
+    <div class="info-card">
+      <div class="info-row">
+        <span class="info-label">📧 Email</span>
+        <span class="info-value" id="emailDisplay">loading...</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">👤 Full Name</span>
+        <span class="info-value" id="nameDisplay">loading...</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">📅 Member Since</span>
+        <span class="info-value" id="memberSince">2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Included Subjects -->
+  <div class="info-section">
+    <div class="section-title">📖 Included Subjects</div>
+    <div class="info-card">
+      <div class="info-row">
+        <span class="info-label">🧪 Science</span>
+        <span class="info-value">✓ Unlocked</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">📐 Math</span>
+        <span class="info-value">✓ Unlocked</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">🌍 SST</span>
+        <span class="info-value">✓ Unlocked</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">📖 Languages</span>
+        <span class="info-value">✓ Unlocked</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Motivational Message -->
+  <div class="motivation-card">
+    <span class="motivation-icon">🚀</span>
+    <div class="motivation-title">All The Best For Your Exams!</div>
+    <div class="motivation-text">
+      You've made the right choice investing in your future. Stay focused, practice regularly, and success will follow. We believe in you! 💪
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="action-buttons">
+    <button class="btn btn-primary" onclick="go('dashboard.html')">
+      🏠 Back to Dashboard
+    </button>
+    <button class="btn btn-secondary" onclick="go('subject.html')">
+      📚 Start Learning
+    </button>
+  </div>
+
+</div>
+
+<!-- Sidebar Menu -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">MINDSKYRA</div>
+    <div class="sidebar-user" id="sidebarUser"></div>
+  </div>
+  <div class="menu-item" onclick="go('dashboard.html')">
+    <span class="menu-icon">🏠</span>
+    <span>Dashboard</span>
+  </div>
+  <div class="menu-item" onclick="go('subject.html')">
+    <span class="menu-icon">📚</span>
+    <span>My Subjects</span>
+  </div>
+  <div class="menu-item" onclick="go('payment.html')">
+    <span class="menu-icon">💳</span>
+    <span>Payment</span>
+  </div>
+  <div class="menu-item active" onclick="go('profile.html')">
+    <span class="menu-icon">👤</span>
+    <span>Profile</span>
+  </div>
+  <div class="menu-item" onclick="go('settings.html')">
+    <span class="menu-icon">⚙️</span>
+    <span>Settings</span>
+  </div>
+  <div class="menu-item" onclick="logout()">
+    <span class="menu-icon">🚪</span>
+    <span>Logout</span>
+  </div>
+</div>
+
+<!-- Overlay -->
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <div class="nav-item" onclick="go('dashboard.html')">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Home</span>
+  </div>
+  <div class="nav-item" onclick="go('subject.html')">
+    <span class="nav-icon">📚</span>
+    <span class="nav-label">Subjects</span>
+  </div>
+  <div class="nav-item" onclick="go('payment.html')">
+    <span class="nav-icon">💳</span>
+    <span class="nav-label">Payment</span>
+  </div>
+  <div class="nav-item active">
+    <span class="nav-icon">👤</span>
+    <span class="nav-label">Profile</span>
+  </div>
+</div>
+
+<script>
+function go(page) {
+  location.href = page;
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+  sidebar.classList.toggle("open");
+  overlay.classList.toggle("active");
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+  sidebar.classList.remove("open");
+  overlay.classList.remove("active");
+}
+
+function logout() {
+  if (confirm("Are you sure you want to logout?")) {
+    // Logout logic will be added
+    location.href = "login.html";
+  }
+}
+</script>
+
+<!-- AUTH + DATA LOAD -->
+<script type="module">
+import { auth, db } from "./js/firebase.js";
+import { onAuthStateChanged, signOut } from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { doc, getDoc } from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    location.href = "login.html";
+    return;
+  }
+
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists() || snap.data().approved !== true) {
+    location.href = "payment-status.html";
+    return;
+  }
+  
+  // Load user data
+  const userData = snap.data();
+  if (userData) {
+    const name = userData.name || "Student";
+    const email = userData.email || user.email;
+    
+    document.getElementById("userName").innerText = name;
+    document.getElementById("userEmail").innerText = email;
+    document.getElementById("nameDisplay").innerText = name;
+    document.getElementById("emailDisplay").innerText = email;
+    document.getElementById("sidebarUser").innerText = `${name}'s Profile`;
+    
+    // Set member since date
+    const joinDate = new Date().getFullYear();
+    document.getElementById("memberSince").innerText = joinDate;
+  }
+});
+
+// Logout function
+window.logout = async () => {
+  if (confirm("Are you sure you want to logout?")) {
+    await signOut(auth);
+    location.href = "login.html";
+  }
+};
+</script>
+
+</body>
+</html>

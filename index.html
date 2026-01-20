@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MindSkyra Institute – Board Exam Success Guaranteed</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #cdefefe7;
+  color: #000000;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Animated background particles */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(0, 229, 168, 0.979);
+  border-radius: 50%;
+  animation: float-particle 15s infinite ease-in-out;
+}
+
+@keyframes float-particle {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translate(100px, -100vh) scale(0.5); opacity: 0; }
+}
+
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  animation: slideDown 0.6s ease-out;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-left .logo {
+  font-size: 32px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.brand-left h1 {
+  font-size: 22px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #00b894, #0984e3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.trust-badge {
+  font-size: 11px;
+  color: #00e5a8;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 229, 168, 0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 229, 168, 0.3);
+}
+
+/* Hero Main */
+.hero-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 0;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeInUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.discount-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff3366, #ff6b35);
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  animation: pulse 2s infinite;
+  box-shadow: 0 0 20px rgba(255, 51, 102, 0.4);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.hero-main h2 {
+  font-size: 40px;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  font-weight: 800;
+  color: #2d3436;
+}
+
+.hero-main .gradient-text {
+  background: linear-gradient(135deg, #00e5a8, #00b8ff, #bd00ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 3s ease infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.hero-main p {
+  margin-top: 14px;
+  color: #636e72;
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Pricing */
+.pricing {
+  margin: 30px auto;
+  max-width: 400px;
+  background: linear-gradient(135deg, #061f38, #0d1013);
+  padding: 24px;
+  border-radius: 20px;
+  border: 2px solid #00b894;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+  box-shadow: 0 10px 30px rgba(0, 184, 148, 0.15);
+}
+
+.price-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.original-price {
+  font-size: 24px;
+  color: #ff6b6b;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.current-price {
+  font-size: 48px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #00e5a8, #00ff88);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.savings {
+  background: rgba(0, 229, 168, 0.15);
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #00e5a8;
+  font-weight: 600;
+}
+
+/* Stats */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 30px;
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.stat {
+  background: linear-gradient(135deg, #bdd6f0, #9cffae);
+  padding: 18px 14px;
+  border-radius: 16px;
+  font-size: 13px;
+  border: 1px solid #000000;
+  transition: all 0.3s ease;
+  color: #000000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.stat:hover {
+  transform: translateY(-5px);
+  background: #ffffff;
+  border-color: #00b894;
+  box-shadow: 0 8px 20px rgba(0, 184, 148, 0.2);
+}
+
+.stat-number {
+  font-size: 24px;
+  font-weight: 700;
+  color: #00e5a8;
+  display: block;
+  margin-top: 6px;
+}
+
+/* Actions */
+.actions {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+.actions a {
+  text-decoration: none;
+  padding: 16px;
+  border-radius: 16px;
+  font-weight: 700;
+  text-align: center;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.actions a::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.actions a:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00e5a8, #00b8ff);
+  color: #000;
+  box-shadow: 0 10px 30px rgba(0, 229, 168, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(0, 229, 168, 0.4);
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: #2d3436;
+  border: 2px solid #00b894;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.btn-secondary:hover {
+  background: #00b894;
+  color: #ffffff;
+  border-color: #00b894;
+  box-shadow: 0 8px 20px rgba(0, 184, 148, 0.3);
+}
+
+.admin-link {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #636e72;
+  transition: color 0.3s ease;
+}
+
+.admin-link:hover {
+  color: #00e5a8;
+}
+
+/* Features Grid */
+.features {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  animation: fadeInUp 0.8s ease-out 1s both;
+}
+
+.feature {
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #06acf4;
+  text-align: left;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.feature:hover {
+  transform: translateX(5px);
+  border-color: #00b894;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(0, 184, 148, 0.15);
+}
+
+.feature-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.feature-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #2d3436;
+}
+
+.feature-desc {
+  font-size: 12px;
+  color: #636e72;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: #636e72;
+  padding: 20px 0;
+  animation: fadeIn 0.8s ease-out 1.2s both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .hero-main h2 {
+    font-size: 32px;
+  }
+  
+  .current-price {
+    font-size: 40px;
+  }
+  
+  .stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .features {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Animated particles -->
+<div class="particles">
+  <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+  <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+  <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+  <div class="particle" style="left: 40%; animation-delay: 1s;"></div>
+  <div class="particle" style="left: 50%; animation-delay: 3s;"></div>
+  <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+  <div class="particle" style="left: 70%; animation-delay: 2.5s;"></div>
+  <div class="particle" style="left: 80%; animation-delay: 4.5s;"></div>
+  <div class="particle" style="left: 90%; animation-delay: 1.5s;"></div>
+</div>
+
+<div class="hero">
+
+  <!-- HEADER -->
+  <div class="brand">
+    <div class="brand-left">
+      <span class="logo">🎓</span>
+      <h1>MindSkyra Institute</h1>
+    </div>
+    <div class="trust-badge">
+      ⭐ 4.9/5 Rated
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="hero-main">
+    
+    <div class="discount-badge">
+      🎉 LIMITED TIME: 80% OFF Board Exam Package!
+    </div>
+
+    <h2>
+      Master All Subjects with<br>
+      <span class="gradient-text">Board Exam Hacks</span>
+    </h2>
+
+    <p>
+      Complete Science, Math, SST & Languages preparation.<br>
+      Last-moment revision tricks, test papers & expert guidance.<br>
+      <strong>Your final touch to exam success! 🚀</strong>
+    </p>
+
+    <!-- PRICING -->
+    <div class="pricing">
+      <div class="price-row">
+        <span class="original-price">₹3,799</span>
+        <span class="current-price">₹749</span>
+      </div>
+      <div class="savings">
+        💰 You Save ₹3,050 (80% OFF)
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat">
+        📚 <strong>All Subjects</strong>
+        <span class="stat-number">4+</span>
+      </div>
+      <div class="stat">
+        😊 <strong>Happy Students</strong>
+        <span class="stat-number">1.5K+</span>
+      </div>
+      <div class="stat">
+        ⭐ <strong>Success Rate</strong>
+        <span class="stat-number">95%</span>
+      </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="features">
+      <div class="feature">
+        <span class="feature-icon">⚡</span>
+        <div class="feature-title">Last Moment Hacks</div>
+        <div class="feature-desc">Quick revision strategies that work</div>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">📝</span>
+        <div class="feature-title">Test Papers</div>
+        <div class="feature-desc">Practice with real exam patterns</div>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🎯</span>
+        <div class="feature-title">Expert Tips</div>
+        <div class="feature-desc">From teachers who know boards</div>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">💯</span>
+        <div class="feature-title">Score Boost</div>
+        <div class="feature-desc">Proven methods to score higher</div>
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="actions">
+      <a href="login.html" class="btn-primary">🔐 Student Login</a>
+      <a href="register.html" class="btn-secondary">✍️ Start Learning - ₹749 Only</a>
+
+      <a href="admin/admin-login.html" class="admin-link">
+        ⚙️ Admin Login
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    © 2026 MindSkyra Institute • Trusted by 1,500+ Students<br>
+    🔒 Secure Payment • 
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MindSkyra Institute</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #000000 0%, #243837 100%);
+  color: #ffffff;
+  min-height: 100vh;
+  padding-bottom: 80px;
+  overflow-x: hidden;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #093025 0%, #05356b 100%);
+  padding: 30px 20px 40px;
+  border-radius: 0 0 30px 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: linear-gradient(45deg, #00d4ff, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.greeting {
+  font-size: 18px;
+  font-weight: 400;
+  opacity: 0.95;
+  margin-bottom: 5px;
+}
+
+.user-name {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* Approval Success Modal */
+.approval-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.approval-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.approval-content {
+  background: linear-gradient(135deg, #1f4037 0%, #99f2c8 100%);
+  padding: 40px 30px;
+  border-radius: 25px;
+  text-align: center;
+  max-width: 350px;
+  width: 90%;
+  animation: slideUp 0.5s ease;
+  box-shadow: 0 10px 40px rgba(0, 212, 255, 0.3);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.approval-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.approval-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #ffffff;
+}
+
+.approval-message {
+  font-size: 16px;
+  margin-bottom: 25px;
+  opacity: 0.95;
+  line-height: 1.5;
+}
+
+.approval-btn {
+  background: linear-gradient(135deg, #00d4ff, #0099cc);
+  color: #ffffff;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+}
+
+.approval-btn:active {
+  transform: scale(0.95);
+}
+
+/* Main Content */
+.container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 30px 0 15px;
+  color: #51f9fbe3;
+}
+
+/* Subject Grid */
+.subject-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.subject-box {
+  background: linear-gradient(135deg, #153c43 0%, #000000 100%);
+  border: 2px solid #fdfff1;
+  border-radius: 20px;
+  padding: 30px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.subject-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.subject-box:active::before {
+  left: 100%;
+}
+
+.subject-box:active {
+  transform: scale(0.95);
+  border-color: #00d4ff;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.subject-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.subject-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Stats Section */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #1f4037 0%, #2d5a4d 100%);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #00d4ff;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0 20px;
+  border-top: 1px solid #3d3d3d;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px 15px;
+  transition: all 0.3s ease;
+  color: #888;
+}
+
+.nav-item.active {
+  color: #00d4ff;
+}
+
+.nav-item:active {
+  transform: scale(0.9);
+}
+
+.nav-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.nav-label {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* Sidebar Menu */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 280px;
+  height: 100vh;
+  background: linear-gradient(180deg, #000000cd 0%, #0a0a0acd 100%);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+  transition: left 0.3s ease;
+  z-index: 200;
+  overflow-y: auto;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar-header {
+  background: linear-gradient(135deg, #042a58 0%, #271a6a 100%);
+  padding: 30px 20px;
+  margin-bottom: 10px;
+}
+
+.sidebar-logo {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.sidebar-user {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.menu-item {
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 16px;
+}
+
+.menu-item:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-left-color: #00d4ff;
+}
+
+.menu-item:active {
+  background: rgba(0, 212, 255, 0.2);
+}
+
+.menu-icon {
+  font-size: 22px;
+  width: 30px;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 150;
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Approval Success Modal -->
+<div class="approval-modal" id="approvalModal">
+  <div class="approval-content">
+    <div class="approval-icon">🎉</div>
+    <div class="approval-title">Approved!</div>
+    <div class="approval-message">
+      Congratulations! Your payment has been verified.<br>
+      <strong>You now have full access to all courses!</strong>
+    </div>
+    <button class="approval-btn" onclick="closeApprovalModal()">
+      Start Learning 🚀
+    </button>
+  </div>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo">MINDSKYRA</div>
+  <div class="greeting" id="greeting"></div>
+  <div class="user-name">Hi,👋</div>
+  <div class="subtitle">Ready to learn something new today?</div>
+</div>
+
+<!-- Main Container -->
+<div class="container">
+  
+  <!-- Stats Section -->
+  <div class="section-title">Your Progress</div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value">4</div>
+      <div class="stat-label">Courses</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">START</div>
+      <div class="stat-label">Completion</div>
+    </div>
+  </div>
+
+  <!-- Subjects Section -->
+  <div class="section-title">My Subjects</div>
+  <div class="subject-grid">
+    <div class="subject-box" onclick="openSubject('science')">
+      <span class="subject-icon">🧪</span>
+      <div class="subject-name">Science</div>
+    </div>
+    <div class="subject-box" onclick="openSubject('math')">
+      <span class="subject-icon">📐</span>
+      <div class="subject-name">Math</div>
+    </div>
+    <div class="subject-box" onclick="openSubject('sst')">
+      <span class="subject-icon">🌍</span>
+      <div class="subject-name">SST</div>
+    </div>
+    <div class="subject-box" onclick="openSubject('languages')">
+      <span class="subject-icon">📖</span>
+      <div class="subject-name">Languages</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Sidebar Menu -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">MINDSKYRA</div>
+    <div class="sidebar-user"></div>
+  </div>
+  <div class="menu-item" onclick="go('dashboard.html')">
+    <span class="menu-icon">🏠</span>
+    <span>Dashboard</span>
+  </div>
+  <div class="menu-item" onclick="go('subject.html')">
+    <span class="menu-icon">📚</span>
+    <span>My Subjects</span>
+  </div>
+  <div class="menu-item" onclick="go('payment.html')">
+    <span class="menu-icon">💳</span>
+    <span>Payment</span>
+  </div>
+  <div class="menu-item" onclick="go('profile.html')">
+    <span class="menu-icon">👤</span>
+    <span>Profile</span>
+  </div>
+  <div class="menu-item" onclick="go('settings.html')">
+    <span class="menu-icon">⚙️</span>
+    <span>Settings</span>
+  </div>
+  <div class="menu-item" onclick="logout()">
+    <span class="menu-icon">🚪</span>
+    <span>Logout</span>
+  </div>
+</div>
+
+<!-- Overlay -->
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <div class="nav-item active">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Home</span>
+  </div>
+  <div class="nav-item" onclick="go('subject.html')">
+    <span class="nav-icon">📚</span>
+    <span class="nav-label">Subjects</span>
+  </div>
+  <div class="nav-item" onclick="go('payment.html')">
+    <span class="nav-icon">💳</span>
+    <span class="nav-label">Payment</span>
+  </div>
+  <div class="nav-item" onclick="toggleSidebar()">
+    <span class="nav-icon">☰</span>
+    <span class="nav-label">Menu</span>
+  </div>
+</div>
+
+<script>
+/* Greeting */
+const hour = new Date().getHours();
+let greet = "Good Evening";
+if (hour < 12) greet = "Good Morning";
+else if (hour < 17) greet = "Good Afternoon";
+document.getElementById("greeting").innerText = greet;
+
+function openSubject(s) {
+  location.href = `subject.html?name=${s}`;
+}
+
+function go(p) {
+  location.href = p;
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+  sidebar.classList.toggle("open");
+  overlay.classList.toggle("active");
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+  sidebar.classList.remove("open");
+  overlay.classList.remove("active");
+}
+
+function closeApprovalModal() {
+  document.getElementById("approvalModal").classList.remove("show");
+  // Mark as seen in localStorage
+  localStorage.setItem('approvalMessageSeen', 'true');
+}
+
+function logout() {
+  // Add logout logic here
+  alert("Logout functionality");
+}
+</script>
+
+<!-- AUTH + LOCK -->
+<script type="module">
+import { auth, db } from "./js/firebase.js";
+import { onAuthStateChanged } from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { doc, getDoc } from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    location.href = "login.html";
+    return;
+  }
+
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists() || snap.data().approved !== true) {
+    location.href = "payment-status.html";
+    return;
+  }
+  
+  // Update user name from Firebase
+  const userData = snap.data();
+  if (userData && userData.name) {
+    document.querySelector(".user-name").innerText = `Hi, ${userData.name}! 👋`;
+    document.querySelector(".sidebar-user").innerText = `${userData.name}'s Profile`;
+  }
+
+  // Show approval message if first time after approval
+  const approvalSeen = localStorage.getItem('approvalMessageSeen');
+  if (!approvalSeen) {
+    setTimeout(() => {
+      document.getElementById("approvalModal").classList.add("show");
+    }, 500);
+  }
+});
+</script>
+</body>
+</html>

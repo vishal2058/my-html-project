@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MindSkyra Institute – Admin Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="../css/style.css">
+
+<style>
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #050b14, #0b1e2d, #1a0f2e);
+  font-family: 'Segoe UI', sans-serif;
+  color: #fff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+h2 { text-align: center; }
+h3 { margin-bottom: 12px; }
+
+.muted {
+  color: #9fb3c8;
+  font-size: 13px;
+}
+
+/* STATS */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.stat {
+  background: rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 18px;
+  text-align: center;
+}
+
+.stat b { font-size: 26px; }
+
+/* BUTTONS */
+.btn {
+  padding: 12px 18px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #00e5a8, #00b8ff);
+  color: #000;
+}
+
+.btn.reject {
+  background: linear-gradient(135deg, #ff4d4d, #ff7b7b);
+}
+
+.top-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+/* SECTIONS */
+.section {
+  margin-top: 40px;
+}
+
+/* CARDS */
+.card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 18px;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 12px;
+  margin: 10px 0;
+  cursor: zoom-in;
+}
+
+/* PDF LIST */
+.pdf-item {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.pdf-item:last-child {
+  border-bottom: none;
+}
+
+.pdf-item a {
+  color: #00e5a8;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+/* SUBJECT BUTTONS */
+.subject-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+  gap: 14px;
+}
+
+.subject-btn {
+  background: rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 14px;
+}
+
+.modal span {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+}
+
+.logout {
+  text-align: center;
+  margin: 40px 0;
+  cursor: pointer;
+  color: #9fb3c8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>⚙️ Admin Dashboard</h2>
+  <p class="muted" style="text-align:center">
+    MindSkyra Institute – Full Control Panel
+  </p>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">👥 Students<br><b id="total">0</b></div>
+    <div class="stat">⏳ Pending<br><b id="pending">0</b></div>
+    <div class="stat">✅ Approved<br><b id="approved">0</b></div>
+    <div class="stat">❌ Rejected<br><b id="rejected">0</b></div>
+  </div>
+
+  <!-- TOP ACTION -->
+  <div class="top-actions">
+    <button class="btn" onclick="window.open('upload-pdf.html','_blank')">
+      📤 Upload PDFs (New Tab)
+    </button>
+  </div>
+
+  <!-- PAYMENT APPROVALS -->
+  <div class="section">
+    <h3>💳 Payment Approvals</h3>
+    <div id="payments"></div>
+  </div>
+
+  <!-- UPLOADED SUBJECTS / PDFs -->
+  <div class="section">
+    <h3>📚 Uploaded Subjects & PDFs</h3>
+    <div id="pdfList"></div>
+  </div>
+
+  <!-- SUBJECT PREVIEW -->
+  <div class="section">
+    <h3>📘 Subject Preview (Student View)</h3>
+    <div class="subject-grid">
+      <div class="subject-btn" onclick="openSubject('science')">🔬 Science</div>
+      <div class="subject-btn" onclick="openSubject('math')">➗ Math</div>
+      <div class="subject-btn" onclick="openSubject('sst')">🌍 SST</div>
+      <div class="subject-btn" onclick="openSubject('languages')">🗣️ Languages</div>
+    </div>
+  </div>
+
+  <div class="logout" onclick="logout()">🚪 Logout</div>
+</div>
+
+<!-- IMAGE MODAL -->
+<div class="modal" id="imgModal" onclick="closeModal()">
+  <span onclick="closeModal()">×</span>
+  <img id="modalImg">
+</div>
+
+<script>
+function openSubject(subject) {
+  window.open(`../subject.html?name=${subject}`, '_blank');
+}
+</script>
+
+<script type="module">
+import { auth, db } from "../js/firebase.js";
+import { onAuthStateChanged, signOut } from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  getDoc
+} from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const paymentsDiv = document.getElementById("payments");
+const pdfDiv = document.getElementById("pdfList");
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return location.href = "admin-login.html";
+
+  const adminSnap = await getDoc(doc(db, "users", user.uid));
+  if (!adminSnap.exists() || adminSnap.data().role !== "admin") {
+    alert("Access denied");
+    return location.href = "admin-login.html";
+  }
+
+  loadDashboard();
+});
+
+async function loadDashboard() {
+  paymentsDiv.innerHTML = "";
+  pdfDiv.innerHTML = "";
+
+  const usersSnap = await getDocs(collection(db, "users"));
+  const paySnap = await getDocs(collection(db, "payments"));
+  const pdfSnap = await getDocs(collection(db, "pdfs"));
+
+  let pending = 0, approved = 0, rejected = 0;
+
+  document.getElementById("total").innerText = usersSnap.size;
+
+  paySnap.forEach(p => {
+    const d = p.data();
+    if (d.status === "pending") pending++;
+    if (d.status === "approved") approved++;
+    if (d.status === "rejected") rejected++;
+  });
+
+  document.getElementById("pending").innerText = pending;
+  document.getElementById("approved").innerText = approved;
+  document.getElementById("rejected").innerText = rejected;
+
+  for (const p of paySnap.docs) {
+    const d = p.data();
+    if (d.status !== "pending") continue;
+
+    let studentName = "Unknown Student";
+    let studentEmail = "";
+
+    const userSnap = await getDoc(doc(db, "users", d.userId));
+    if (userSnap.exists()) {
+      const u = userSnap.data();
+      studentName = u.name || studentName;
+      studentEmail = u.email || "";
+    }
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <strong>${studentName}</strong><br>
+      <span class="muted">${studentEmail}</span>
+
+      <img src="${d.screenshotUrl}"
+           onclick="openModal('${d.screenshotUrl}')">
+
+      <button class="btn" onclick="approve('${p.id}','${d.userId}')">✅ Approve</button>
+      <button class="btn reject" onclick="reject('${p.id}')">❌ Reject</button>
+    `;
+    paymentsDiv.appendChild(card);
+  }
+
+  if (pdfSnap.empty) {
+    pdfDiv.innerHTML = "<p class='muted'>No PDFs uploaded yet</p>";
+  } else {
+    pdfSnap.forEach(p => {
+      const d = p.data();
+      const div = document.createElement("div");
+      div.className = "pdf-item";
+      div.innerHTML = `
+        📘 <b>${d.subject.toUpperCase()}</b><br>
+        📄 ${d.title}<br>
+        <a href="${d.url}" target="_blank">Open PDF</a>
+      `;
+      pdfDiv.appendChild(div);
+    });
+  }
+}
+
+window.approve = async (id, uid) => {
+  await updateDoc(doc(db, "payments", id), { status: "approved" });
+  await updateDoc(doc(db, "users", uid), { approved: true });
+  loadDashboard();
+};
+
+window.reject = async (id) => {
+  await updateDoc(doc(db, "payments", id), { status: "rejected" });
+  loadDashboard();
+};
+
+window.logout = async () => {
+  await signOut(auth);
+  location.href = "admin-login.html";
+};
+
+window.openModal = (src) => {
+  document.getElementById("modalImg").src = src;
+  document.getElementById("imgModal").style.display = "flex";
+};
+
+window.closeModal = () => {
+  document.getElementById("imgModal").style.display = "none";
+};
+</script>
+
+</body>
+</html>
