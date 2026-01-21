@@ -5,14 +5,61 @@
 <title>MindSkyra Institute – Subject</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="css/style.css">
+
+<style>
+/* 🔒 FREEZE OVERLAY */
+.freeze {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(138, 146, 140, 0.96);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.freeze-box {
+  max-width: 320px;
+}
+
+.freeze-box h3 {
+  margin-bottom: 10px;
+}
+
+.freeze-box button {
+  margin-top: 25px;
+  padding: 10px 20px;
+  border: none;
+  background: #000;
+  color: #0a7683;
+  border-radius: 6px;
+}
+</style>
 </head>
 
 <body>
 
+<!-- 🔒 FREEZE SCREEN -->
+<div id="freezeScreen" class="freeze" style="display:none;">
+  <div class="freeze-box">
+    <h3>🔒 Access Locked</h3>
+    <p class="muted">
+      Your payment is not approved yet.<br>
+      Please wait for admin approval.
+    </p>
+    <button onclick="location.href='payment.html'">
+      Go to Payment
+    </button>
+  </div>
+</div>
+
 <div class="container">
   <h2 id="subjectTitle">Loading...</h2>
   <p class="muted">MindSkyra Institute</p>
-
   <div id="pdfList" class="grid" style="margin-top:20px;"></div>
 </div>
 
@@ -47,13 +94,18 @@ function go(p) {
 import { auth, db } from "./js/firebase.js";
 import { onAuthStateChanged } from
   "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { collection, query, where, getDocs } from
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc
+} from
   "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const params = new URLSearchParams(window.location.search);
 const subject = params.get("name");
-
-
 
 document.getElementById("subjectTitle").innerText =
   subject ? subject.toUpperCase() : "SUBJECT";
@@ -64,6 +116,18 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
+  /* 🔐 CHECK APPROVAL */
+  const userRef = doc(db, "users", user.uid);
+  const userSnap = await getDoc(userRef);
+
+  const approved = userSnap.exists() &&
+                   userSnap.data()?.approved === true;
+
+  if (!approved) {
+    document.getElementById("freezeScreen").style.display = "flex";
+  }
+
+  /* LOAD PDFs (LOCKED OR UNLOCKED) */
   const q = query(
     collection(db, "pdfs"),
     where("subject", "==", subject)
@@ -81,29 +145,26 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  snap.forEach(doc => {
-    const data = doc.data();
+  snap.forEach(docSnap => {
+    const data = docSnap.data();
 
     const card = document.createElement("div");
     card.className = "card subject-card";
     card.innerHTML = `
       <h3>${data.title}</h3>
-      <p class="muted">Tap to open</p>
+      <p class="muted">${approved ? "Tap to open" : "Locked"}</p>
     `;
-    card.onclick = () => {
-      location.href = `viewer.html?pdf=${encodeURIComponent(data.url)}`;
-    };
+
+    if (approved) {
+      card.onclick = () => {
+        location.href =
+          `viewer.html?pdf=${encodeURIComponent(data.url)}`;
+      };
+    }
 
     list.appendChild(card);
   });
 });
-</script>
-<script>
-    if (data.approved !== true) {
-  window.location.href = "payment-status.html";
-  return;
-}
-
 </script>
 
 </body>
